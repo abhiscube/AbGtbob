@@ -357,6 +357,17 @@ export default class StyleSheetFactory {
             
             },
 
+            textlabelexc: {
+                fontFamily: "Helvetica",
+                fontSize: 16,
+                color: "#4A4A4A",
+                justifyContent: "center",
+                
+                textAlign: 'center',
+                fontWeight: 'bold',
+    
+            },
+
             textnewhead: {
                 fontFamily: "Helvetica",
                 fontSize: 18,

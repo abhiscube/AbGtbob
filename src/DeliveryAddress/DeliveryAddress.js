@@ -8,6 +8,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Keyboard,
+  Picker,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -48,6 +49,10 @@ export default class DeliveryAddress extends React.Component {
     this.params = this.props.navigation.state.params;
     this.state = {
       newAddress: '',
+      AddressLine1: '',
+      AddressLine2: '',
+      City: '',
+      ZipCode:'',
       selectedAddress: null,
       enterActivity: true,
       keyboardOpened: false,
@@ -55,8 +60,11 @@ export default class DeliveryAddress extends React.Component {
   }
 
   componentDidMount() {
+   // console.log("Hi Ab");
+   // console.log(GlobalVariables.restCurrencyCode);
     this._fetchSavedAddresses();
     this._addKeyboardListeners();
+   
   }
 
   componentWillUnmount() {
@@ -103,6 +111,8 @@ export default class DeliveryAddress extends React.Component {
     };
   };
 
+  
+
   _fetchSavedAddresses() {
     const {_URL, userId} = GlobalVariables;
     if (userId.value) {
@@ -113,6 +123,7 @@ export default class DeliveryAddress extends React.Component {
         .then((response) => response.json())
         .then((res) => {
           GlobalVariables.addresses = this._getAddresses(res);
+          console.log(GlobalVariables.addresses)
           this.setState({enterActivity: false});
         })
         .catch((error) => {
@@ -123,20 +134,22 @@ export default class DeliveryAddress extends React.Component {
     }
   }
 
-  _getAddresses(addresses) {
+  _getAddresses(addresses) {   
     return Array.isArray(addresses)
-      ? addresses.map((a) => ({id: a.id, text: a.deliveryAddress}))
+      ? addresses.map((a) => ({id: a.id, addressLine1: a.addressLine1, addressLine2: a.addressLine2, city: a.city, zipCode:a.zipCode}))
       : [];
   }
+
 
   _onNextButtonClick() {
     if (this._isValidAddress()) {
       const {addresses} = GlobalVariables;
-      const {newAddress, selectedAddress} = this.state;
-      let address = newAddress;
+      const {AddressLine1,AddressLine2,City, selectedAddress} = this.state;
+      let address = 'Flat no :- '+ AddressLine1 +"\n" +'Landmark :- '+ AddressLine2 +"\n" +'City :- '+ City;
       if (selectedAddress !== null) {
         const choosen = addresses.find((a) => a.id === selectedAddress);
-        if (choosen) address = choosen.text;
+        //if (choosen) address = choosen.text;
+        if (choosen) address = 'Flat no :- '+ choosen.addressLine1 +"\n" +'Landmark :- '+ choosen.addressLine2 +"\n" +'City :- '+ choosen.city;
       }
       this._confirmAlert(address);
     } else {
@@ -146,10 +159,12 @@ export default class DeliveryAddress extends React.Component {
 
   _isValidAddress() {
     const {addresses} = GlobalVariables;
-    const {newAddress, selectedAddress} = this.state;
+    const {AddressLine1,AddressLine2,City,selectedAddress} = this.state;
     const wasChoosen = addresses.some((a) => a.id === selectedAddress);
-    const validAddress = newAddress.trim().length > 0;
-    return wasChoosen || (selectedAddress === null && validAddress);
+    const validAddress = AddressLine1.trim().length > 0;
+    const validAddress1 = AddressLine2.trim().length > 0;
+    const validAddress2 = City.trim().length > 0;
+    return wasChoosen || (selectedAddress === null && validAddress && validAddress1 && validAddress2);
   }
 
   _inValidAlert() {
@@ -200,20 +215,27 @@ export default class DeliveryAddress extends React.Component {
   }
 
   _confirmed() {
-    const {newAddress, selectedAddress} = this.state;
+    const {selectedAddress} = this.state;
     if (selectedAddress !== null) {
       GlobalVariables.selectedAddressId = selectedAddress;
       this._gotoPaymentScreen();
     } else {
-      this._saveAddress(newAddress);
+      this._saveAddress();
     }
   }
 
-  _saveAddress(address) {
-    this.setState({enterActivity: true});
+  ///Address Chnages Here To Save 04/02/2021
+  _saveAddress() {
+    let data = {
+      AddressLine1: this.state.AddressLine1,
+      AddressLine2: this.state.AddressLine2,
+      City: this.state.City,
+      ZipCode:this.state.ZipCode
+  };
     const {_URL, userId} = GlobalVariables;
     const url = `${_URL}/customers/${userId.value}/AddDeliveryAddress`;
-    const body = JSON.stringify(address);
+    const body = JSON.stringify(data);
+    console.log("Its Address ",body);
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -226,7 +248,7 @@ export default class DeliveryAddress extends React.Component {
       .then((response) => response.text())
       .then((result) => {
         GlobalVariables.selectedAddressId = result;
-        console.log(result);
+        console.log("selectedAddressId",result);
         this.setState({enterActivity: false});
         this._gotoPaymentScreen();
       })
@@ -336,7 +358,10 @@ export default class DeliveryAddress extends React.Component {
                             <Text style={addressTitleStyle}>
                               {`Address ${idx + 1}`}
                             </Text>
-                            <Text style={addressTextStyle}>{address.text}</Text>
+                            <Text style={addressTextStyle}>{address.addressLine1}</Text>
+                            <Text style={addressTextStyle}>{address.addressLine2}</Text>
+                            <Text style={addressTextStyle}>{address.city} {address.zipCode}</Text>
+                            
                           </View>
                         </View>
                         <View>
@@ -387,9 +412,157 @@ export default class DeliveryAddress extends React.Component {
                     <Text style={addressTitleStyle}>
                       {localeStrings.deliveryAddressStrings.addNew}
                     </Text>
-                    <View>
+                     <View>
+
+                  <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+
+                  <TouchableOpacity>
+                            <KeyboardAvoidingView>
+                              <View
+                                style={{
+                                  height: '100%',
+                                  marginTop:5,
+                                  marginLeft:10,
+                                  marginRight:10,
+                                }}>
+                                <TextInput
+                                  style={{
+                                    color: '#4A4A4A',
+                                    padding:5,
+                                    borderBottomWidth :0.5,
+                                    borderLeftWidth: 0.5,
+                                    borderRightWidth: 0.5,
+                                    borderTopWidth: 0.5,
+                                    fontFamily: 'Helvetica',
+                                    fontSize: 15,
+                                    alignItems: 'flex-start',
+                                    textAlign:'left',
+                                  }}
+                                  onChangeText={(AddressLine1) =>
+                                    this.setState({AddressLine1})
+                                  }
+                                
+                                  value={this.state.AddressLine1}
+                                  placeholderTextColor="#4A4A4A"
+                                  placeholder={localeStrings.deliveryAddressNew.AddressLine1+(' * ')}                            
+                                />
+                              </View>
+                            </KeyboardAvoidingView>
+                  </TouchableOpacity>
+                  </View>
+
+                  <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+
+                  <TouchableOpacity>
                       <KeyboardAvoidingView>
+                        <View
+                          style={{
+                            height: '100%',
+                            marginTop:5,
+                            marginLeft:10,
+                            marginRight:10,
+                          }}>
+                          <TextInput
+                            style={{
+                              color: '#4A4A4A',
+                              padding:5,
+                              borderBottomWidth :0.5,
+                              borderLeftWidth: 0.5,
+                              borderRightWidth: 0.5,
+                              borderTopWidth: 0.5,
+                              fontFamily: 'Helvetica',
+                              fontSize: 15,
+                              alignItems: 'flex-start',
+                              textAlign:'left',
+                            }}
+                            onChangeText={(AddressLine2) =>
+                              this.setState({AddressLine2})
+                            }
+                            value={this.state.AddressLine2}
+                            placeholderTextColor="#4A4A4A"
+                            placeholder={localeStrings.deliveryAddressNew.AddressLine2+(' * ')}                            
+                          />
+                        </View>
+                      </KeyboardAvoidingView>
+                  </TouchableOpacity>
+                  </View>
+
+
+                  <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+
+                  <TouchableOpacity>
+                      <KeyboardAvoidingView>
+                        <View
+                          style={{
+                            height: '100%',
+                            marginTop:5,
+                            marginLeft:10,
+                            marginRight:10,
+                          }}>
+                          <TextInput
+                            style={{
+                              color: '#4A4A4A',
+                              padding:5,
+                              borderBottomWidth :0.5,
+                              borderLeftWidth: 0.5,
+                              borderRightWidth: 0.5,
+                              borderTopWidth: 0.5,
+                              fontFamily: 'Helvetica',
+                              fontSize: 15,
+                              alignItems: 'flex-start',
+                              textAlign:'left',
+                            }}
+                            onChangeText={(City) =>
+                              this.setState({City})
+                            }
+                            value={this.state.City}
+                            placeholderTextColor="#4A4A4A"
+                            placeholder={localeStrings.deliveryAddressNew.City+(' * ')}                            
+                          />
+                        </View>
+                      </KeyboardAvoidingView>
+                  </TouchableOpacity>
+                  </View>
+
+                   <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+
+                  <TouchableOpacity>
+                        <KeyboardAvoidingView>
+                          <View
+                            style={{
+                              height: '100%',
+                              marginTop:5,
+                              marginLeft:10,
+                              marginRight:10,
+                            }}>
+                            <TextInput
+                              style={{
+                                color: '#4A4A4A',
+                                padding:5,
+                                borderBottomWidth :0.5,
+                                borderLeftWidth: 0.5,
+                                borderRightWidth: 0.5,
+                                borderTopWidth: 0.5,
+                                fontFamily: 'Helvetica',
+                                fontSize: 15,
+                                alignItems: 'flex-start',
+                                textAlign:'left',
+                              }}
+                              onChangeText={(ZipCode) =>
+                                this.setState({ZipCode})
+                              }
+                              value={this.state.ZipCode}
+                              placeholderTextColor="#4A4A4A"
+                              placeholder={localeStrings.deliveryAddressNew.ZipCode}                            
+                            />
+                          </View>
+                        </KeyboardAvoidingView>
+                  </TouchableOpacity>
+                  </View>  
+                      {/* <KeyboardAvoidingView>
                         <View style={textInputWrapStyle}>
+
+
                           <TextInput
                             style={textInputStyle}
                             numberOfLines={4}
@@ -398,14 +571,115 @@ export default class DeliveryAddress extends React.Component {
                             }
                             value={this.state.newAddress}></TextInput>
                         </View>
-                      </KeyboardAvoidingView>
-                    </View>
+                      </KeyboardAvoidingView> */}
+                    </View> 
                   </View>
                 </View>
                 <View></View>
               </View>
             </View>
-          </View>
+
+           {/* <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+
+            <TouchableOpacity>
+                      <KeyboardAvoidingView>
+                        <View
+                          style={{
+                            height: '100%',
+                            marginTop:5,
+                            marginLeft:10,
+                            marginRight:10,
+                          }}>
+                          <TextInput
+                            style={{
+                              color: '#4A4A4A',
+                              padding:5,
+                              borderBottomWidth :0.5,
+                              borderLeftWidth: 0.5,
+                              borderRightWidth: 0.5,
+                              borderTopWidth: 0.5,
+                              fontFamily: 'Helvetica',
+                              fontSize: 15,
+                              alignItems: 'flex-start',
+                              textAlign:'left',
+                            }}
+                            onChangeText={(custname) =>
+                              this.setState({custname})
+                            }
+                            value={this.state.custname}
+                            placeholderTextColor="#4A4A4A"
+                            placeholder={localeStrings.deliveryAddressNew.Name}                            
+                          />
+                        </View>
+                      </KeyboardAvoidingView>
+          </TouchableOpacity>
+        </View>
+
+
+        <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+
+              <TouchableOpacity>
+                        <KeyboardAvoidingView>
+                          <View
+                            style={{
+                              height: '100%',
+                              marginTop:5,
+                              marginLeft:10,
+                              marginRight:10,
+                            }}>
+                            <TextInput
+                              style={{
+                                color: '#4A4A4A',
+                                padding:5,
+                                borderBottomWidth :0.5,
+                                borderLeftWidth: 0.5,
+                                borderRightWidth: 0.5,
+                                borderTopWidth: 0.5,
+                                fontFamily: 'Helvetica',
+                                fontSize: 15,
+                                alignItems: 'flex-start',
+                                textAlign:'left',
+                              }}
+                              placeholderTextColor="#4A4A4A"
+                              placeholder={localeStrings.deliveryAddressNew.ContactNo}                            
+                            />
+                          </View>
+                        </KeyboardAvoidingView>
+              </TouchableOpacity>
+        </View> */}
+
+       
+
+
+          {/* <View style={{
+                         marginLeft:10,
+                          marginRight:10,
+                        borderBottomWidth :0.5,
+                        borderLeftWidth: 0.5,
+                        borderRightWidth: 0.5,
+                        borderTopWidth: 0.5,
+                        fontFamily: 'Helvetica',
+                        fontSize: 15,                         
+                        textAlign:'left'
+                        }}>  
+                <Picker    style={{
+                            color: '#4A4A4A',
+                            margin:-5,
+                            marginLeft:-2
+                          }}
+                          selectedValue={this.state.language}  
+                          onValueChange={(itemValue, itemPosition) =>  
+                              this.setState({language: itemValue, choosenIndex: itemPosition})} >  
+
+                    <Picker.Item label="Java" value="java" />  
+                    <Picker.Item label="JavaScript" value="js" />  
+                    <Picker.Item label="React Native" value="rn" />  
+                
+                </Picker>  
+          </View>   */}
+
+
+       </View>
         </ScrollView>
         <View style={footerStyle}>
           <TouchableOpacity

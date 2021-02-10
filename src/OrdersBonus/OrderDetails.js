@@ -625,7 +625,7 @@ export default class OrderDetails extends React.Component {
                                             <Text style={{
 
                                             }}>{localeStrings.orderDetailsStrings.quantity} {items.quantity}</Text>
-                                        </View>
+                                        
 
                                         <View style={{
                                             flexDirection: "row",
@@ -634,14 +634,19 @@ export default class OrderDetails extends React.Component {
                                         }}>
                                             {I18nManager.isRTL ? <Text style={{
                                                 color: "black",
+                                                fontWeight: "bold",
+                                                fontSize: 15,
                                                 //  textAlign: "left",
                                                 marginRight: 15
                                             }}>₪ {items.total}</Text> : <Text style={{
                                                 color: "black",
+                                                fontWeight: "bold",
+                                                fontSize: 15,
                                                 // textAlign: "left",
                                                 marginRight: 15
                                             }}>{items.total} {GlobalVariables.restCurrencyCode.value}</Text>}
 
+                                        </View>
                                         </View>
                                     </View>
                                 </View>

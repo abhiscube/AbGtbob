@@ -319,6 +319,14 @@ const localeStrings = new LocalizedStrings({
                 textOr: "or",
                 forget : "Forget my address"
             },
+            deliveryAddressNew : {
+                Name : "Enter Your Name",   
+                ContactNo : "Enter Your Contact number",     
+                AddressLine1 : "House No / Flat No / Apartment Name",     
+                AddressLine2 : "Landmark / Street Name",              
+                City : "City", 
+                ZipCode : "Zip Code",                
+            },
             paymentStrings : {
                 screenName : "Payments",                
                 chooseOption: "Choose your payment method",
@@ -338,6 +346,7 @@ const localeStrings = new LocalizedStrings({
                 addNewCard : "Add a new payment method",
                 deleteMessage: "Are you sure you want to delete the card?",
                 textOr: "or",
+                textOk: "OK",
                 forgetCard : "Forget my card"
             }
             

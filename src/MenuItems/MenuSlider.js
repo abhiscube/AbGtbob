@@ -174,16 +174,9 @@ export default class MenuSlider extends React.Component {
 
   componentDidUpdate(prevProps) {
     this.params = this.props.navigation.state.params;
-    // Removed for better performance
-    // if (prevProps.isFocused !== this.props.isFocused) {
-    //     if (this.props.isFocused) {
-    //         this.getAllProducts(this.params.barId);
-    //         this.getMainCategories();
-    //         this.setState({
-    //             enterActivity: false
-    //         });
-    //     }
-    // }
+    console.log("Properties "+GlobalVariables.selectedProperties);
+    
+
   }
 
   static navigationOptions = ({navigation}) => {
@@ -342,6 +335,9 @@ export default class MenuSlider extends React.Component {
 
   addCoupon(coupon) {
     const {orders, userId, selectedOrderType, ORDER_TYPE} = GlobalVariables;
+    console.log("Ordesr"+ Object.values(orders[0].selectedProperties)),
+    //console.log("rtr "+ selectedProperties),
+    console.log("Ordesr lkmk"+ Object.values(orders[0].selectedAddOns)),
     this.setState({
       modalVisible: false,
     });
@@ -354,13 +350,16 @@ export default class MenuSlider extends React.Component {
         dressing: orders[i].dressing,
         extraDressing: orders[i].extraDressing,
         specialInstructions: orders[i].specialInstructions,
-        prodPropOptions: this._getProductPropertyIds(
+        
+        ProdPropOptions: this._getProductPropertyIds(
           orders[i].selectedProperties,
         ),
-        prodAddons: this._getProductAddOnsIds(orders[i].selectedAddOns),
+        ProdAddonOptions: this._getProductAddOnsIds(orders[i].selectedAddOns),
       };
       OrderRequest.push(orderItem);
     }
+
+    
     let nextScreen = 'Payment';
     if (selectedOrderType === ORDER_TYPE.DELIVERY) {
       nextScreen = 'DeliveryAddress';
@@ -380,14 +379,46 @@ export default class MenuSlider extends React.Component {
   }
 
   _getProductPropertyIds(properties) {
-    return Object.values(properties)
-      .map((p) => p.selected)
-      .join(',');
+    return Object.values(properties).flatMap(a => a.map(p => p.option.i)).join(',');
   }
+
+    // _getProductPropertyIds(properties) {
+    //   let pids = [];
+    //   const parr = Object.values(properties);
+    //   //console.log("MEEEEEE=== ",parr);
+    //   for (let i = 0; i < parr.length; i++) {
+    //     const paddon = parr[i];
+    //    // console.log("MEEEEEE=== ",paddon);
+    //     for (let j = 0; j < paddon.length; j++) {
+    //     //  console.log("MEEEEEE ??? ", paddon[j].option.i);
+    //       pids.push(paddon[j].option.i);
+    //     }       
+    //   }
+    //   return pids.join(',');
+    // }
+  
+    
+  //   return Object.values(properties)
+  //     .map((p) => p.selected)
+  //     .join(',');
+  
+  // }
+
+  // _getProductPropertyIds(properties) {
+
+
+  //   return Object.values(properties)
+  //  .map((p) => {
+  //   console.log("ORRRR"+p);
+  //   return p;
+  //   })
+
+  // }
 
   _getProductAddOnsIds(addons) {
     let ids = [];
     const arr = Object.values(addons);
+   // console.log("MEEEEEE add on=== ",arr);
     for (let i = 0; i < arr.length; i++) {
       const addon = arr[i];
       for (let j = 0; j < addon.quantity; j++) {
@@ -2061,14 +2092,14 @@ class BackMenu extends React.Component {
                         ? localeStrings.detailItemsStrings.choiceOfDressing
                         : ''}
                     </Text>
-                    {properties.map((p, idx) => (
+                     {properties.map((p, idx) => (
                       <View
                         style={{
-                          flexDirection: 'row',
+                          
                           width: '100%',
                           justifyContent: 'space-between',
-                          paddingRight: 15,
-                        }}
+                        
+                        }}                        
                         key={idx}>                          
                           {p.map((o, id) => (
                                 <View

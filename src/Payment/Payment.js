@@ -259,6 +259,10 @@ export default class Payment extends React.Component {
   }
 
   SendRequest(userId, requestData, type, remember) {
+   // alert(remember);
+    console.log("One Request Data  "+requestData);
+    console.log("One Request Data  "+JSON.stringify(requestData));
+    
     const {cardSelected} = this.state;
     const {
       _URL,
@@ -269,6 +273,7 @@ export default class Payment extends React.Component {
     } = GlobalVariables;
     const addressId = isDelivery() ? selectedAddressId : null;
     const url = `${_URL}/customers/${userId}/add-cart-items/${selectedOrderType}/${addressId}`;
+    console.log("Payment "+url)
     let totalTip = 0;
     if (this.state.isTips10) {
       totalTip = (this.state.subTotal * 10) / 100;
@@ -292,6 +297,7 @@ export default class Payment extends React.Component {
           if (response !== '') {
             // if (response[0].success) {
             if (this.state.isPayPalSelected) {
+              console.log("isPayPalSelected "+remember);
               this.props.navigation.navigate('Paypal', {
                 screen: 'Paypal',
                 item: remember,
@@ -299,6 +305,7 @@ export default class Payment extends React.Component {
                 coupon: this.params.coupon,
               });
             } else if (this.state.isIsracardSelected) {
+              console.log("isIsracardSelected"+remember);
               this.props.navigation.navigate('Isracard', {
                 screen: 'Isracard',
                 item: remember,
@@ -307,6 +314,7 @@ export default class Payment extends React.Component {
               });
             } else {
               const card = cards.find((c) => c.id === cardSelected);
+              console.log("Isracard"+remember);
               this.props.navigation.navigate('Isracard', {
                 screen: 'Isracard',
                 item: remember,
@@ -542,7 +550,7 @@ export default class Payment extends React.Component {
                               localeStrings.paymentStrings.warningText,
                               [
                                 {
-                                  text: localeStrings.paymentStrings.textYes,
+                                  text: localeStrings.paymentStrings.textOk,
                                 },
                               ],
                               {cancelable: false},
@@ -1055,30 +1063,23 @@ export default class Payment extends React.Component {
                                   alignItems: 'flex-start',
                                 }}>
                                 <Text
-                                  style={{
+                                  style={[{
                                     color: 'black',
                                     marginTop: 15,
                                     fontWeight: 'bold',
                                     fontSize: 15,
-                                  }}>
+                                  }]}>
                                   {items.info.name}
                                 </Text>
                                 <Text style={{}}>
-                                  {localeStrings.orderDetailsStrings.quantity}{' '}
+                                  {localeStrings.orderDetailsStrings.quantity}{' = '}
                                   {items.quantity}
                                 </Text>
-                              </View>
-
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                }}>
                                 {I18nManager.isRTL ? (
                                   <Text
                                     style={{
                                       color: 'black',
+                                      fontWeight: 'bold',
                                       //  textAlign: "left",
                                       marginRight: 15,
                                     }}>
@@ -1089,6 +1090,7 @@ export default class Payment extends React.Component {
                                     style={{
                                       color: 'black',
                                       // textAlign: "left",
+                                      fontWeight: 'bold',
                                       marginRight: 15,
                                     }}>
                                     {items.price}{' '}
@@ -1096,6 +1098,8 @@ export default class Payment extends React.Component {
                                   </Text>
                                 )}
                               </View>
+
+                              
                             </View>
                             <Text
                               style={{
@@ -1111,7 +1115,7 @@ export default class Payment extends React.Component {
                             {properties.map((p, idx) => (
                               <View
                                 style={{
-                                  flexDirection: 'row',
+                                  flexDirection: 'column',
                                   width: '100%',
                                   justifyContent: 'space-between',
                                   paddingRight: 15,
@@ -1557,7 +1561,7 @@ export default class Payment extends React.Component {
                     localeStrings.paymentStrings.warningText,
                     [
                       {
-                        text: localeStrings.paymentStrings.textYes,
+                        text: localeStrings.paymentStrings.textOk,
                         onPress: () => {
                           console.log('Choose');
                         },

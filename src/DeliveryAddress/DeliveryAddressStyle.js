@@ -69,6 +69,7 @@ export const addressWrapStyle = {
   justifyContent: 'space-between',
   flex: 1,
   width: '100%',
+  margin:5,
   alignItems: 'center',
   borderColor: '#9B9B9B',
   borderWidth: 0.5,
@@ -90,7 +91,7 @@ export const addressInputContainerStyle = {
 };
 
 export const radioStyle = {
-  justifyContent: 'center',
+  justifyContent: 'center',  
   alignItems: 'center',
   marginRight: 8,
   height: 60,
@@ -105,9 +106,10 @@ export const addressInnerContainerStyle = (width = '75%') => ({
 });
 
 export const addressTitleStyle = {
-  fontFamily: 'Helvetica',
   fontSize: 15,
-  textAlign: 'left',
+  fontStyle: 'bold',  
+  marginLeft:10,
+
 };
 
 export const addressTextStyle = {
@@ -115,6 +117,7 @@ export const addressTextStyle = {
   fontSize: 11,
   color: '#9B9B9B',
   textAlign: 'left',
+  marginLeft:10,
 };
 
 export const deleteImageStyle = {

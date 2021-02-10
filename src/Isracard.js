@@ -87,7 +87,12 @@ export default class Isracard extends Component {
 
     componentDidMount() {
         let Obj = {};
+        console.log(this.state.cardMask);
+        console.log(this.state.cardExp);
+        console.log(this.state.cardName);
+      
         if (this.state.cardMask === undefined && this.state.cardExp === undefined && this.state.cardName === undefined) {
+            console.log("In If Condition");
             Obj = {
                 UserID: GlobalVariables.userId.value,
                 CouponCode: this.params.coupon,
@@ -108,7 +113,8 @@ export default class Isracard extends Component {
                 }
             }
         }
-        console.log(Obj);
+        console.log("enter create 1235 ",Obj);
+        console.log("enter create 1235 ", JSON.stringify(Obj));
         this.setState({
             webViewLoading: true
         });
@@ -124,7 +130,7 @@ export default class Isracard extends Component {
             })
                 .then(response => response.json())
                 .then(response => {
-                    console.log("enter create", response);
+                    console.log("enter create 12356  ", response);
                     
                     
                     if (response.done === "true" && Obj.Card.buyer_card_mask != undefined) {
@@ -137,6 +143,7 @@ export default class Isracard extends Component {
                                 urlIsracard: response.sale_url,
                                 isSavedCard : true
                             })
+                            
                             this._onNavigationStateChange();
                         }
                     }
@@ -155,11 +162,12 @@ export default class Isracard extends Component {
                 })
                 .catch(error => {
                     console.log(error)
+                    console.log("In Catch Payment Screen",error)
 
                 });
         } catch (e) {
             console.log(e)
-
+            console.log("In Catch Payment Screen 1 ",e)
 
         }
     }
@@ -171,6 +179,7 @@ export default class Isracard extends Component {
                 payme_sale_id: this.state.payme_sale_id,
                 payme_transaction_id: this.state.payme_transaction_id
             };
+            console.log("In If Condition Response 0 ",JSON.stringify(data));
             try {
                 fetch(GlobalVariables._URL + '/Isracard/ExecutePayment/' + GlobalVariables.userId.value + "/" + this.state.orderId, {
                     method: "POST",
@@ -183,7 +192,7 @@ export default class Isracard extends Component {
                 })
                     .then(response => response.json())
                     .then(response => {
-                        console.log(response);
+                        console.log("In If Condition Response 1 ",response);
                         if (response.status === "success") {
                             this.props.navigation.navigate("OrderCompleted", {
                                 screen: "OrderCompleted", NoOrder: response.orderId
@@ -211,11 +220,12 @@ export default class Isracard extends Component {
             }
         } else {
             if (!webViewState.title.includes("about"))  {
-                console.log("enter about");
+                console.log("enter about In ELSE",webViewState.loading);
+
                 if (webViewState.url.includes('http://bob.justplus.eu/app/index.html?payme_status') && webViewState.loading === false) {
 
                     console.log("enter succes");
-
+ 
                     this.setState({ urlIsracard: "" });
 
                     const urlSite = webViewState.url;
@@ -249,7 +259,7 @@ export default class Isracard extends Component {
                             body: JSON.stringify(data)
                         }).then(response => response.json())
                             .then(response => {
-                                console.log(response);
+                                console.log("Execute Payment "+response);
                                 if (response.status === "success") {
 
                                     this.props.navigation.navigate("OrderCompleted", {
@@ -276,7 +286,10 @@ export default class Isracard extends Component {
                         console.error("upload catch error", e);
 
                     }
+                }else{
+                    console.log("not good In else")
                 }
+               
             } else {
                 console.log("not good")
             }
@@ -288,6 +301,7 @@ export default class Isracard extends Component {
         console.log("enter render");
         if (this.state.urlIsracard !== null && this.state.urlIsracard !== "") {
 
+            console.log(" render IF");
 
             const injectedJs = `window.postMessage(window.location.href);`;
             return (
@@ -340,6 +354,7 @@ export default class Isracard extends Component {
                 </View>
             )
         } else {
+            console.log(" render ELSE");
             return (
                 <View style={{
                     width: "100%", height: "100%",

@@ -151,6 +151,7 @@ export default class DetailsItem extends React.Component {
 
   _fetchPropertiesAndAddons() {
     const {id} = this.params.productData;
+   // alert(id);
     const {_URL, userLanguage} = GlobalVariables;
     const url = `${_URL}/categories/ProductPropsAndAddons/${id}/${userLanguage.value}`;
     fetch(url, {
@@ -164,6 +165,7 @@ export default class DetailsItem extends React.Component {
         console.log('error', error);
         this.setState({enterActivity: false});
       });
+     // alert("lpp" +this.state.details.lpp);
   }
 
   showCheckIn() {
@@ -309,8 +311,8 @@ export default class DetailsItem extends React.Component {
     const {selectedAddOns, selectedProperties} = GlobalVariables;
     const properties = Object.values(selectedProperties);
     const addons = Object.values(selectedAddOns);
-    console.log(properties);
-    console.log(properties[0]);
+    console.log(lpp.length);
+   // console.log(properties[0]);
   
 
     if (this.state.detailsItem.extras.length >= 1) {
@@ -1134,10 +1136,16 @@ export default class DetailsItem extends React.Component {
                   width: '100%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}>
-                <Text style={{color: 'white'}}>
-                {localeStrings.detailItemsStrings.add}
+                }} >
+               
+                {lpp.length ? (
+                <Text style={{color: 'white',fontSize:18}}>
+                {localeStrings.detailItemsStrings.extraDressing}
                 </Text>
+                ): 
+                <Text style={{color: 'white',fontSize:18}}>
+                {localeStrings.detailItemsStrings.add}
+                </Text>}
               </TouchableOpacity>
             </View>
           </ScrollView>
