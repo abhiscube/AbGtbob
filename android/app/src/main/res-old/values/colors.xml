@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="splashscreen_bg">#26466c</color>
+    <color name="app_bg">#424242</color>
+    <color name="com_facebook_button_background_color_focused_disabled">#424242</color>
+    <color name="com_facebook_button_background_color_focused">#424242</color>
+    <color name="com_facebook_button_border_color_focused">#424242</color>
+</resources>

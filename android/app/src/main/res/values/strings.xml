@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">BOB</string>
+<!--    <string name="facebook_app_id">463553780938397</string>-->
+<!--    <string name="facebook_app_id">463553780938397</string>-->
+<!--    <string name="fb_login_protocol_scheme">fb463553780938397</string>-->
+    <!-- <string name="facebook_app_id">1313182372194723</string>
+    <string name="fb_login_protocol_scheme">fb1313182372194723</string> -->
+    
+    <!-- New FB APP Code -->
+    <string name="facebook_app_id">671571403691895</string>
+    <string name="fb_login_protocol_scheme">fb671571403691895</string>
+
+</resources>

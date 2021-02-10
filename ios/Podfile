@@ -1,0 +1,38 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'BOB' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for BOB
+ pod 'FBSDKLoginKit'
+
+  
+
+  pod 'RNI18n', :path => '../node_modules/react-native-i18n'
+
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+
+  pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
+
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
+
+  pod 'react-native-gps-state', :path => '../node_modules/react-native-gps-state'
+
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+
+end
+
+
+
+
+
