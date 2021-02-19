@@ -312,7 +312,7 @@ class BobLocationsAll extends BaseComponent {
   }
 
   getBarLocationsAsPerMenu(menuitem){
-
+    console.log(menuitem);
     try {
       fetch(
         GlobalVariables._URL +

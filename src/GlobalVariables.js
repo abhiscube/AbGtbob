@@ -65,6 +65,7 @@ export class GlobalVariables {
     this.selectedProperties = {};
     this.selectedAddOns = {};
   };
+  static labelchange = 0;
 
   // Distance
   static isValidLocation = (curr) =>

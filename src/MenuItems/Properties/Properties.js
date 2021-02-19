@@ -254,6 +254,7 @@ export default class Properties extends React.Component {
       });
     }else{
       GlobalVariables.lppname = 0;
+      GlobalVariables.labelchange = 1;
       this.props.navigation.navigate('DetailsItem', {
         name: 'DetailsItem',
       });

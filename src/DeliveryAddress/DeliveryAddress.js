@@ -15,6 +15,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 import localeStrings from '../../res/strings/LocaleStrings';
 import {GlobalVariables} from '../GlobalVariables';
+import DeviceInfo from 'react-native-device-info';
+const deviceLocale = DeviceInfo.getDeviceLocale();
 import {
   addressTitleStyle,
   backStyle,
@@ -52,7 +54,6 @@ export default class DeliveryAddress extends React.Component {
       AddressLine1: '',
       AddressLine2: '',
       City: '',
-      ZipCode:'',
       selectedAddress: null,
       enterActivity: true,
       keyboardOpened: false,
@@ -136,7 +137,7 @@ export default class DeliveryAddress extends React.Component {
 
   _getAddresses(addresses) {   
     return Array.isArray(addresses)
-      ? addresses.map((a) => ({id: a.id, addressLine1: a.addressLine1, addressLine2: a.addressLine2, city: a.city, zipCode:a.zipCode}))
+      ? addresses.map((a) => ({id: a.id, addressLine1: a.addressLine1, addressLine2: a.addressLine2, city: a.city}))
       : [];
   }
 
@@ -229,8 +230,7 @@ export default class DeliveryAddress extends React.Component {
     let data = {
       AddressLine1: this.state.AddressLine1,
       AddressLine2: this.state.AddressLine2,
-      City: this.state.City,
-      ZipCode:this.state.ZipCode
+      City: this.state.City
   };
     const {_URL, userId} = GlobalVariables;
     const url = `${_URL}/customers/${userId.value}/AddDeliveryAddress`;
@@ -355,12 +355,19 @@ export default class DeliveryAddress extends React.Component {
                             />
                           </TouchableOpacity>
                           <View style={addressInnerContainerStyle()}>
+                          {deviceLocale === 'he-IL' &&
+                        GlobalVariables.userLanguage.value === 'en-US' ? (
                             <Text style={addressTitleStyle}>
-                              {`Address ${idx + 1}`}
+                             {localeStrings.deliveryAddressNew.AddressLabel + `-` + `${idx + 1}`}
                             </Text>
+                        ):(
+                          <Text style={addressTitleStyle}>
+                          {localeStrings.deliveryAddressNew.AddressLabel + `-` + `${idx + 1}`}
+                        </Text>
+                        )}
                             <Text style={addressTextStyle}>{address.addressLine1}</Text>
                             <Text style={addressTextStyle}>{address.addressLine2}</Text>
-                            <Text style={addressTextStyle}>{address.city} {address.zipCode}</Text>
+                            <Text style={addressTextStyle}>{address.city}</Text>
                             
                           </View>
                         </View>
@@ -425,6 +432,8 @@ export default class DeliveryAddress extends React.Component {
                                   marginLeft:10,
                                   marginRight:10,
                                 }}>
+                        {deviceLocale === 'he-IL' &&
+                        GlobalVariables.userLanguage.value === 'en-US' ? (
                                 <TextInput
                                   style={{
                                     color: '#4A4A4A',
@@ -446,6 +455,29 @@ export default class DeliveryAddress extends React.Component {
                                   placeholderTextColor="#4A4A4A"
                                   placeholder={localeStrings.deliveryAddressNew.AddressLine1+(' * ')}                            
                                 />
+                        ):(
+                          <TextInput
+                          style={{
+                            color: '#4A4A4A',
+                            padding:5,
+                            borderBottomWidth :0.5,
+                            borderLeftWidth: 0.5,
+                            borderRightWidth: 0.5,
+                            borderTopWidth: 0.5,
+                            fontFamily: 'Helvetica',
+                            fontSize: 15,
+                            alignItems: 'flex-start',
+                            textAlign:'left',
+                          }}
+                          onChangeText={(AddressLine1) =>
+                            this.setState({AddressLine1})
+                          }
+                        
+                          value={this.state.AddressLine1}
+                          placeholderTextColor="#4A4A4A"
+                          placeholder={localeStrings.deliveryAddressNew.AddressLine1+(' * ')}                            
+                        />
+                        )}
                               </View>
                             </KeyboardAvoidingView>
                   </TouchableOpacity>
@@ -462,6 +494,8 @@ export default class DeliveryAddress extends React.Component {
                             marginLeft:10,
                             marginRight:10,
                           }}>
+                      {deviceLocale === 'he-IL' &&
+                        GlobalVariables.userLanguage.value === 'en-US' ? (
                           <TextInput
                             style={{
                               color: '#4A4A4A',
@@ -482,6 +516,28 @@ export default class DeliveryAddress extends React.Component {
                             placeholderTextColor="#4A4A4A"
                             placeholder={localeStrings.deliveryAddressNew.AddressLine2+(' * ')}                            
                           />
+                          ) : (
+                            <TextInput
+                            style={{
+                              color: '#4A4A4A',
+                              padding:5,
+                              borderBottomWidth :0.5,
+                              borderLeftWidth: 0.5,
+                              borderRightWidth: 0.5,
+                              borderTopWidth: 0.5,
+                              fontFamily: 'Helvetica',
+                              fontSize: 15,
+                              alignItems: 'flex-start',
+                              textAlign:'left',
+                            }}
+                            onChangeText={(AddressLine2) =>
+                              this.setState({AddressLine2})
+                            }
+                            value={this.state.AddressLine2}
+                            placeholderTextColor="#4A4A4A"
+                            placeholder={localeStrings.deliveryAddressNew.AddressLine2+(' * ')}                            
+                          />
+                          )}
                         </View>
                       </KeyboardAvoidingView>
                   </TouchableOpacity>
@@ -499,6 +555,8 @@ export default class DeliveryAddress extends React.Component {
                             marginLeft:10,
                             marginRight:10,
                           }}>
+                      {deviceLocale === 'he-IL' &&
+                        GlobalVariables.userLanguage.value === 'en-US' ? (
                           <TextInput
                             style={{
                               color: '#4A4A4A',
@@ -519,12 +577,38 @@ export default class DeliveryAddress extends React.Component {
                             placeholderTextColor="#4A4A4A"
                             placeholder={localeStrings.deliveryAddressNew.City+(' * ')}                            
                           />
+                          ) : (
+
+                            <TextInput
+                            style={{
+                              color: '#4A4A4A',
+                              padding:5,
+                              borderBottomWidth :0.5,
+                              borderLeftWidth: 0.5,
+                              borderRightWidth: 0.5,
+                              borderTopWidth: 0.5,
+                              fontFamily: 'Helvetica',
+                              fontSize: 15,
+                              alignItems: 'flex-start',
+                              textAlign:'left',
+                            }}
+                            onChangeText={(City) =>
+                              this.setState({City})
+                            }
+                            value={this.state.City}
+                            placeholderTextColor="#4A4A4A"
+                            placeholder={localeStrings.deliveryAddressNew.City+(' * ')}                            
+                          />
+
+                          )}
                         </View>
                       </KeyboardAvoidingView>
                   </TouchableOpacity>
                   </View>
 
-                   <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+              
+
+                   {/* <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
 
                   <TouchableOpacity>
                         <KeyboardAvoidingView>
@@ -558,7 +642,11 @@ export default class DeliveryAddress extends React.Component {
                           </View>
                         </KeyboardAvoidingView>
                   </TouchableOpacity>
-                  </View>  
+                  </View>   */}
+
+
+
+          
                       {/* <KeyboardAvoidingView>
                         <View style={textInputWrapStyle}>
 

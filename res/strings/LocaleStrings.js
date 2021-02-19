@@ -194,7 +194,8 @@ const localeStrings = new LocalizedStrings({
                 youMovedToFar: "You moved too far away from your current checked in restaurant, you will be checked out!",
             },
             bobLocationAllStrings: {
-                searchFor: "Search for bar,beaches,hotels and other",
+                searchFor: "Search",
+             //   searchFor: "Search for bar,beaches,hotels and other",
                 filterBy: "Filter by distance from you",
                 any: "Any",
                 eightHundred: "800 m",
@@ -322,11 +323,11 @@ const localeStrings = new LocalizedStrings({
             deliveryAddressNew : {
                 Name : "Enter Your Name",   
                 ContactNo : "Enter Your Contact number",     
-                AddressLine1 : "House No / Flat No / Apartment Name",     
+                AddressLine1 : "House No / Flat No / Floor",     
                 AddressLine2 : "Landmark / Street Name",              
-                City : "City", 
-                ZipCode : "Zip Code",                
-            },
+                City : "City",   
+                AddressLabel : "Address"                      
+            },            
             paymentStrings : {
                 screenName : "Payments",                
                 chooseOption: "Choose your payment method",
@@ -536,7 +537,8 @@ const localeStrings = new LocalizedStrings({
                 youMovedToFar: "התרחקת ממקום הבילוי אתה תנותק מהערכת - BoB",
             },
             bobLocationAllStrings: {
-                searchFor: "חיפוש מקומות",
+              //  searchFor: "חיפוש מקומות",            
+                searchFor:"לחפש",    
                 filterBy: "מיין על פי מרחק",
                 any: "הכל",
 
@@ -546,6 +548,14 @@ const localeStrings = new LocalizedStrings({
                 tenKm: "10 ק\"מ",
                 distance: "מרחק:",
                 km: "ק\"מ"
+            },
+            deliveryAddressNew : {
+                Name : "Enter Your Name",   
+                ContactNo : "Enter Your Contact number",     
+                AddressLine1 : "קומה/מספר דירה/מספר בית", 
+                AddressLine2 : "שם הרחוב",              
+                City : "שם עיר",  
+                AddressLabel : "כתובת"               
             },
             barLocationStrings: {
                 youMovedToFar: "התרחקת מהמקום, קשה למערכת לזהות אותך, המערכת תנתק אותך",

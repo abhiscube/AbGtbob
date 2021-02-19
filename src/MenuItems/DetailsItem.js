@@ -240,7 +240,6 @@ export default class DetailsItem extends React.Component {
 
   addItemInMenu() {
     const {selectedProperties, selectedAddOns} = GlobalVariables;
-
     GlobalVariables.orders.push({
       info: this.state.detailsItem,
       quantity: this.state.itemQuantity,
@@ -304,6 +303,32 @@ export default class DetailsItem extends React.Component {
       selectedOrderType === ORDER_TYPE.TAKE_AWAY ||
       selectedOrderType === ORDER_TYPE.DELIVERY
     );
+  }
+
+  buttonlabel(lpp){
+    console.log("Lpp  "+lpp.length)
+    console.log("Lpp Name "+GlobalVariables.lppname)
+    if(lpp.length != 0){
+      if(GlobalVariables.labelchange == 0){
+        return <View>
+        <Text style={{color: 'white',fontSize:18}}>
+         {localeStrings.detailItemsStrings.extraDressing}
+         </Text>
+         </View>;  
+      }else{
+        return <View>
+        <Text style={{color: 'white',fontSize:18}}>
+        {localeStrings.detailItemsStrings.add}
+         </Text>
+         </View>;  
+      }      
+    }else{
+      return <View>
+        <Text style={{color: 'white',fontSize:18}}>
+      {localeStrings.detailItemsStrings.add}
+      </Text>
+      </View>;  
+    }
   }
 
   render() {
@@ -1129,6 +1154,7 @@ export default class DetailsItem extends React.Component {
                            .done();
                       }
                     }
+                    GlobalVariables.labelchange = 0;
                  }} 
               
                 style={{
@@ -1137,15 +1163,8 @@ export default class DetailsItem extends React.Component {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }} >
-               
-                {lpp.length ? (
-                <Text style={{color: 'white',fontSize:18}}>
-                {localeStrings.detailItemsStrings.extraDressing}
-                </Text>
-                ): 
-                <Text style={{color: 'white',fontSize:18}}>
-                {localeStrings.detailItemsStrings.add}
-                </Text>}
+
+              {this.buttonlabel(lpp)}
               </TouchableOpacity>
             </View>
           </ScrollView>
