@@ -51,6 +51,8 @@ export default class DeliveryAddress extends React.Component {
     this.params = this.props.navigation.state.params;
     this.state = {
       newAddress: '',
+      Buildingnumber:'',
+      Appartment:'',
       AddressLine1: '',
       AddressLine2: '',
       City: '',
@@ -124,7 +126,7 @@ export default class DeliveryAddress extends React.Component {
         .then((response) => response.json())
         .then((res) => {
           GlobalVariables.addresses = this._getAddresses(res);
-          console.log(GlobalVariables.addresses)
+          console.log("Address ",GlobalVariables.addresses)
           this.setState({enterActivity: false});
         })
         .catch((error) => {
@@ -137,7 +139,7 @@ export default class DeliveryAddress extends React.Component {
 
   _getAddresses(addresses) {   
     return Array.isArray(addresses)
-      ? addresses.map((a) => ({id: a.id, addressLine1: a.addressLine1, addressLine2: a.addressLine2, city: a.city}))
+      ? addresses.map((a) => ({id: a.id,ZipCode: a.zipCode, DeliveryAddress: a.deliveryAddress, addressLine1: a.addressLine1, addressLine2: a.addressLine2, city: a.city}))
       : [];
   }
 
@@ -145,13 +147,22 @@ export default class DeliveryAddress extends React.Component {
   _onNextButtonClick() {
     if (this._isValidAddress()) {
       const {addresses} = GlobalVariables;
-      const {AddressLine1,AddressLine2,City, selectedAddress} = this.state;
-      let address = 'Flat no :- '+ AddressLine1 +"\n" +'Landmark :- '+ AddressLine2 +"\n" +'City :- '+ City;
+      const {Buildingnumber,Appartment,AddressLine1,AddressLine2,City, selectedAddress} = this.state;
+      let address;
+      if (GlobalVariables.userLanguage.value === 'he-IL') {        
+         address = 'מספר בניין/מספר בית :- '+ Buildingnumber +"\n" +'מספר דירה, :- '+ Appartment +"\n" +'קומה :- '+ AddressLine1 +"\n" +'שם הרחוב :- '+ AddressLine2 +"\n" +'שם העיר:- '+ City;    
+      }else{
+        address = 'Building Number :- '+ Buildingnumber +"\n" +'Appartment :- '+ Appartment +"\n" +'Floor :- '+ AddressLine1 +"\n" +'Street Name :- '+ AddressLine2 +"\n" +'City :- '+ City;
+      }
       if (selectedAddress !== null) {
         const choosen = addresses.find((a) => a.id === selectedAddress);
         //if (choosen) address = choosen.text;
-        if (choosen) address = 'Flat no :- '+ choosen.addressLine1 +"\n" +'Landmark :- '+ choosen.addressLine2 +"\n" +'City :- '+ choosen.city;
-      }
+        if (GlobalVariables.userLanguage.value === 'he-IL') {  
+          if (choosen) address = 'מספר בניין/מספר בית :- '+ choosen.ZipCode +"\n" +'מספר דירה, :- '+ choosen.DeliveryAddress +"\n" +'קומה :- '+ choosen.addressLine1 +"\n" +'שם הרחוב :- '+ choosen.addressLine2 +"\n" +'שם העיר:- '+ choosen.city;    
+        }else{
+          if (choosen) address = 'Building Number :- '+ choosen.ZipCode +"\n" +'Appartment :- '+ choosen.DeliveryAddress +"\n" +'Floor :- '+ choosen.addressLine1 +"\n" +'Street Name :- '+ choosen.addressLine2 +"\n" +'City :- '+ choosen.city;
+        }
+    }
       this._confirmAlert(address);
     } else {
       this._inValidAlert();
@@ -160,12 +171,14 @@ export default class DeliveryAddress extends React.Component {
 
   _isValidAddress() {
     const {addresses} = GlobalVariables;
-    const {AddressLine1,AddressLine2,City,selectedAddress} = this.state;
+    const {Buildingnumber,Appartment,AddressLine1,AddressLine2,City,selectedAddress} = this.state;
     const wasChoosen = addresses.some((a) => a.id === selectedAddress);
     const validAddress = AddressLine1.trim().length > 0;
     const validAddress1 = AddressLine2.trim().length > 0;
-    const validAddress2 = City.trim().length > 0;
-    return wasChoosen || (selectedAddress === null && validAddress && validAddress1 && validAddress2);
+    const validAddress2 = Buildingnumber.trim().length > 0;
+    const validAddress3 = Appartment.trim().length > 0;
+    const validAddress4 = City.trim().length > 0;
+    return wasChoosen || (selectedAddress === null && validAddress && validAddress1 && validAddress2 && validAddress3 && validAddress4);
   }
 
   _inValidAlert() {
@@ -228,6 +241,8 @@ export default class DeliveryAddress extends React.Component {
   ///Address Chnages Here To Save 04/02/2021
   _saveAddress() {
     let data = {
+      ZipCode:this.state.Buildingnumber,
+      DeliveryAddress:this.state.Appartment,
       AddressLine1: this.state.AddressLine1,
       AddressLine2: this.state.AddressLine2,
       City: this.state.City
@@ -365,7 +380,7 @@ export default class DeliveryAddress extends React.Component {
                           {localeStrings.deliveryAddressNew.AddressLabel + `-` + `${idx + 1}`}
                         </Text>
                         )}
-                            <Text style={addressTextStyle}>{address.addressLine1}</Text>
+                            <Text style={addressTextStyle}>{address.ZipCode+`/`}{address.DeliveryAddress+`/`}{address.addressLine1}</Text>
                             <Text style={addressTextStyle}>{address.addressLine2}</Text>
                             <Text style={addressTextStyle}>{address.city}</Text>
                             
@@ -420,6 +435,131 @@ export default class DeliveryAddress extends React.Component {
                       {localeStrings.deliveryAddressStrings.addNew}
                     </Text>
                      <View>
+
+                  <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+
+                  <TouchableOpacity>
+                            <KeyboardAvoidingView>
+                              <View
+                                style={{
+                                  height: '100%',
+                                  marginTop:5,
+                                  marginLeft:10,
+                                  marginRight:10,
+                                }}>
+                        {deviceLocale === 'he-IL' &&
+                        GlobalVariables.userLanguage.value === 'en-US' ? (
+                                <TextInput
+                                  style={{
+                                    color: '#4A4A4A',
+                                    padding:5,
+                                    borderBottomWidth :0.5,
+                                    borderLeftWidth: 0.5,
+                                    borderRightWidth: 0.5,
+                                    borderTopWidth: 0.5,
+                                    fontFamily: 'Helvetica',
+                                    fontSize: 15,
+                                    alignItems: 'flex-start',
+                                    textAlign:'left',
+                                  }}
+                                  onChangeText={(Buildingnumber) =>
+                                    this.setState({Buildingnumber})
+                                  }
+                                
+                                  value={this.state.Buildingnumber}
+                                  placeholderTextColor="#4A4A4A"
+                                  placeholder={localeStrings.deliveryAddressNew.Buildingnumber+(' * ')}                            
+                                />
+                        ):(
+                          <TextInput
+                          style={{
+                            color: '#4A4A4A',
+                            padding:5,
+                            borderBottomWidth :0.5,
+                            borderLeftWidth: 0.5,
+                            borderRightWidth: 0.5,
+                            borderTopWidth: 0.5,
+                            fontFamily: 'Helvetica',
+                            fontSize: 15,
+                            alignItems: 'flex-start',
+                            textAlign:'left',
+                          }}
+                          onChangeText={(Buildingnumber) =>
+                            this.setState({Buildingnumber})
+                          }
+                        
+                          value={this.state.Buildingnumber}
+                          placeholderTextColor="#4A4A4A"
+                          placeholder={localeStrings.deliveryAddressNew.Buildingnumber+(' * ')}                            
+                        />
+                        )}
+                              </View>
+                            </KeyboardAvoidingView>
+                  </TouchableOpacity>
+                  </View>
+
+                  <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
+
+                  <TouchableOpacity>
+                            <KeyboardAvoidingView>
+                              <View
+                                style={{
+                                  height: '100%',
+                                  marginTop:5,
+                                  marginLeft:10,
+                                  marginRight:10,
+                                }}>
+                        {deviceLocale === 'he-IL' &&
+                        GlobalVariables.userLanguage.value === 'en-US' ? (
+                                <TextInput
+                                  style={{
+                                    color: '#4A4A4A',
+                                    padding:5,
+                                    borderBottomWidth :0.5,
+                                    borderLeftWidth: 0.5,
+                                    borderRightWidth: 0.5,
+                                    borderTopWidth: 0.5,
+                                    fontFamily: 'Helvetica',
+                                    fontSize: 15,
+                                    alignItems: 'flex-start',
+                                    textAlign:'left',
+                                  }}
+                                  onChangeText={(Appartment) =>
+                                    this.setState({Appartment})
+                                  }
+                                
+                                  value={this.state.Appartment}
+                                  placeholderTextColor="#4A4A4A"
+                                  placeholder={localeStrings.deliveryAddressNew.Appartment+(' * ')}                            
+                                />
+                        ):(
+                          <TextInput
+                          style={{
+                            color: '#4A4A4A',
+                            padding:5,
+                            borderBottomWidth :0.5,
+                            borderLeftWidth: 0.5,
+                            borderRightWidth: 0.5,
+                            borderTopWidth: 0.5,
+                            fontFamily: 'Helvetica',
+                            fontSize: 15,
+                            alignItems: 'flex-start',
+                            textAlign:'left',
+                          }}
+                          onChangeText={(Appartment) =>
+                            this.setState({Appartment})
+                          }
+                        
+                          value={this.state.Appartment}
+                          placeholderTextColor="#4A4A4A"
+                          placeholder={localeStrings.deliveryAddressNew.Appartment+(' * ')}                            
+                        />
+                        )}
+                              </View>
+                            </KeyboardAvoidingView>
+                  </TouchableOpacity>
+                  </View>
+
 
                   <View style={{width: '100%', height: 50, backgroundColor: 'white'}}>
 

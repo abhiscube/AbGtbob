@@ -322,9 +322,11 @@ const localeStrings = new LocalizedStrings({
             },
             deliveryAddressNew : {
                 Name : "Enter Your Name",   
-                ContactNo : "Enter Your Contact number",     
-                AddressLine1 : "House No / Flat No / Floor",     
-                AddressLine2 : "Landmark / Street Name",              
+                ContactNo : "Enter Your Contact number",  
+                Buildingnumber: "Building Number/House Number",   
+                Appartment: "Appartment number",
+                AddressLine1 : "Floor",     
+                AddressLine2 : "Street Name",              
                 City : "City",   
                 AddressLabel : "Address"                      
             },            
@@ -551,10 +553,12 @@ const localeStrings = new LocalizedStrings({
             },
             deliveryAddressNew : {
                 Name : "Enter Your Name",   
-                ContactNo : "Enter Your Contact number",     
-                AddressLine1 : "קומה/מספר דירה/מספר בית", 
-                AddressLine2 : "שם הרחוב",              
-                City : "שם עיר",  
+                ContactNo : "Enter Your Contact number",  
+                Buildingnumber: "מספר בניין/מספר בית",   
+                Appartment: "מספר דירה",
+                AddressLine1 : "קומה",     
+                AddressLine2 : "שם הרחוב",          
+                City : "שם העיר",  
                 AddressLabel : "כתובת"               
             },
             barLocationStrings: {
